@@ -1,0 +1,29 @@
+CREATE Transaksi table_name (
+    id AUTOINCREMENT PRIMARY KEY,
+    tanggal_order datatype,
+    status varchar(15),
+    tanggal_pembayaran datetime,
+);
+CREATE TransaksiDetail table_name (
+    id AUTOINCREMENT PRIMARY KEY,
+    id_transaksi int,
+    harga int,
+    jumlah int,
+    subtotal int,
+);
+
+INSERT INTO Transaksi values (null, '2008-11-11 13:23:44', "lunas", '2008-11-11 13:23:44');
+INSERT INTO Transaksi values (null, '2008-11-11 13:23:44', "pending", '2008-11-11 13:23:44');
+INSERT INTO TransaksiDetail values (null, 1, 3000, 2, 6000);
+INSERT INTO TransaksiDetail values (null, 1, 3000, 3, 9000);
+INSERT INTO TransaksiDetail values (null, 2, 3000, 1, 3000);
+INSERT INTO TransaksiDetail values (null, 2, 3000, 5, 15000);
+INSERT INTO TransaksiDetail values (null, 1, 3000, 2, 6000);
+
+select a.id
+, a.tanggal_order
+, a.tanggal_pembayaran
+, (select sum(c.subtotal) from TransaksiDetail c where c.id_transaksi = a.id) as total
+, (select sum(d.jumlah) from TransaksiDetail d where d.id_transaksi = a.id) as jumlah_barang
+from Transaksi a
+join TransaksiDetail b on a.id = b.id_transaksi
